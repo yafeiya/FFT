@@ -111,12 +111,12 @@ if __name__ == '__main__':
 
     # # 一、16个点实验信号
     # sample_array = [random.randint(1, 100) for _ in range(16)]
-    # # sample_array = [91, 78, 6, 46, 31, 84, 9, 13, 22, 5, 1, 30, 61, 19, 60, 70]
-    # print('原始离散信号\n', sample_array)
-    # res = cal_butterfly_array(sample_array)
-    # print('FFT计算结果\n', res[3])
+    # res = cal_butterfly_array(sample_array)[3]
     # y_fft = fft(sample_array)
-    # print('FFT调库结果\n', y_fft)
+    #
+    # print('原始离散信号\n', sample_array)
+    # print('FFT计算结果\n',[('{:.2f}'.format(i)) for i in res])
+    # print('验证scipy库的fft结果\n', [('{:.2f}'.format(i)) for i in y_fft])
 
     # 二、模拟真实信号、加窗、幅值修正
     window = choose_windows(name='Hanning')
@@ -125,7 +125,8 @@ if __name__ == '__main__':
     freq_1 = 3
     t = np.arange(-5, 5, 10 / N)  # 离散时间10s,1024点数, 采样率为102.4HZ
     k = np.arange(0, N, 1)
-    x = (2 * np.sin(2*np.pi * freq_1 * t) + np.random.normal(0, 0.05, 1024)) * window
+    x_raw = 2 * np.sin(2*np.pi * freq_1 * t)
+    x = (x_raw + np.random.normal(0, 0.05, 1024)) * window
 
     # 执行FFT
     fft_res = (cal_butterfly_array(x))[3]
@@ -145,8 +146,8 @@ if __name__ == '__main__':
     plt.subplot(211)
     plt.plot(t, x)
     plt.title('Signal')
-    plt.xlabel('Time / s')
-    plt.ylabel('Intencity / cd')
+    plt.xlabel('Time ')
+    plt.ylabel('Amplitude ')
 
     plt.subplot(212)
     plt.plot(k, f_array)
